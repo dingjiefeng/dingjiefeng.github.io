@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="dingjiefeng 的个人技术博客，记录后端开发、工程实践、工具与机器学习探索。">
+  <meta name="theme-color" content="#f6f4ef">
+  <title>dingjiefeng / 工程笔记</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f6f4ef;
+      --paper-raised: #fffdf8;
+      --ink: #13233a;
+      --muted: #66717f;
+      --line: #d7d5cf;
+      --accent: #d9543f;
+      --accent-soft: #f1d8d1;
+      --code: #e9e6df;
+      --measure: 72rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --paper: #111923;
+        --paper-raised: #172230;
+        --ink: #edf2f6;
+        --muted: #a4afbb;
+        --line: #33404d;
+        --accent: #f07a62;
+        --accent-soft: #492c2b;
+        --code: #202d3a;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #111923;
+      --paper-raised: #172230;
+      --ink: #edf2f6;
+      --muted: #a4afbb;
+      --line: #33404d;
+      --accent: #f07a62;
+      --accent-soft: #492c2b;
+      --code: #202d3a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 6rem;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Songti SC", SimSun, serif;
+      font-size: 1.08rem;
+      line-height: 1.75;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-color: var(--accent);
+      text-decoration-thickness: 0.09em;
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover { color: var(--accent); }
+
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 20;
+      padding: 0.5rem 0.8rem;
+      transform: translateY(-150%);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid color-mix(in srgb, var(--line), transparent 20%);
+      background: color-mix(in srgb, var(--paper), transparent 8%);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(calc(100% - 2rem), var(--measure));
+      min-height: 4.5rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.55rem;
+      text-decoration: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .wordmark-mark {
+      color: var(--accent);
+      font-size: 1.35em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.75rem, 2vw, 1.5rem);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.88rem;
+    }
+
+    .nav-links a { text-decoration: none; }
+
+    .theme-toggle {
+      width: 2.25rem;
+      height: 2.25rem;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    main {
+      width: min(calc(100% - 2rem), var(--measure));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: min(78vh, 48rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(15rem, 0.75fr);
+      gap: clamp(3rem, 8vw, 8rem);
+      align-items: center;
+      padding: clamp(5rem, 10vw, 9rem) 0;
+    }
+
+    .hero h1 {
+      max-width: 13ch;
+      margin: 0;
+      font-size: clamp(3.2rem, 8vw, 7.2rem);
+      font-weight: 500;
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+    }
+
+    .hero h1 span {
+      display: block;
+      margin-top: 0.18em;
+      color: var(--accent);
+    }
+
+    .hero-intro {
+      align-self: end;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-intro p {
+      margin: 0 0 1.4rem;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    .hero-intro strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .hero-link {
+      display: inline-block;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 12rem minmax(0, 1fr);
+      gap: clamp(2rem, 6vw, 7rem);
+      padding: clamp(5rem, 9vw, 8rem) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .section-title::before {
+      content: "";
+      display: block;
+      width: 2.8rem;
+      height: 0.28rem;
+      margin-bottom: 1rem;
+      background: var(--accent);
+    }
+
+    .note-index {
+      position: relative;
+      padding-left: 2.25rem;
+    }
+
+    .note-index::before {
+      content: "";
+      position: absolute;
+      top: 0.7rem;
+      bottom: 0;
+      left: 0.36rem;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .note {
+      position: relative;
+      max-width: 46rem;
+    }
+
+    .note::before {
+      content: "";
+      position: absolute;
+      top: 0.62rem;
+      left: -2.25rem;
+      width: 0.72rem;
+      height: 0.72rem;
+      border: 3px solid var(--paper);
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .note time,
+    .project-meta {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.78rem;
+    }
+
+    .note h2 {
+      margin: 0.4rem 0 1.1rem;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+
+    .note p { max-width: 68ch; }
+
+    .note blockquote {
+      margin: 2rem 0;
+      padding: 0.1rem 0 0.1rem 1.4rem;
+      border-left: 0.28rem solid var(--accent);
+      color: var(--muted);
+      font-size: 1.18rem;
+    }
+
+    .project-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: minmax(11rem, 0.8fr) minmax(0, 1.4fr);
+      gap: 2rem;
+      padding: 1.6rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project:first-child { padding-top: 0; }
+
+    .project h3 {
+      margin: 0 0 0.35rem;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .project p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .about-copy {
+      max-width: 52rem;
+      font-size: clamp(1.35rem, 2.6vw, 2rem);
+      line-height: 1.48;
+      letter-spacing: -0.02em;
+    }
+
+    .about-copy p { margin-top: 0; }
+
+    .site-footer {
+      width: min(calc(100% - 2rem), var(--measure));
+      margin: 0 auto;
+      padding: 2.5rem 0 3.5rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 760px) {
+      body { font-size: 1rem; }
+      .nav { min-height: 4rem; }
+      .nav-links a:not(.github-link) { display: none; }
+      .hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 5rem 0 6rem;
+      }
+      .hero h1 { max-width: 9ch; }
+      .hero-intro { max-width: 32rem; }
+      .section {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .project { grid-template-columns: 1fr; gap: 0.65rem; }
+      .site-footer { flex-direction: column; gap: 0.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到正文</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="wordmark" href="#top"><span class="wordmark-mark">/</span>dingjiefeng</a>
+      <div class="nav-links">
+        <a href="#notes">文章</a>
+        <a href="#projects">项目</a>
+        <a href="#about">关于</a>
+        <a class="github-link" href="https://github.com/dingjiefeng" rel="me">GitHub</a>
+        <button class="theme-toggle" type="button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <h1 id="hero-title">把复杂的事<span>写清楚。</span></h1>
+      <div class="hero-intro">
+        <p><strong>工程笔记与长期思考。</strong><br>记录后端开发、实用工具，以及机器学习探索。</p>
+        <a class="hero-link" href="#notes">阅读第一篇笔记</a>
+      </div>
+    </section>
+
+    <section class="section" id="notes" aria-labelledby="notes-title">
+      <h2 class="section-title" id="notes-title">最新文章</h2>
+      <div class="note-index">
+        <article class="note">
+          <time datetime="2026-10-29">2026 年 10 月 29 日</time>
+          <h2>重新开始写博客</h2>
+          <p>之前的博客依赖自购域名和服务器。它很自由，但也带来了续费、运维和迁移成本。真正想保留下来的，其实不是一台机器，而是持续写作的习惯。</p>
+          <blockquote>这次从最小的系统开始：静态页面、Git 版本记录、免费托管。</blockquote>
+          <p>新的博客没有数据库，也没有需要长期照看的服务。内容与代码放在一起，每次提交都留下清晰的历史。以后若需要换域名或生成器，文章仍然属于自己。</p>
+          <p>这里会记录后端工程、工具制作、机器学习，以及那些值得反复推敲的问题。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <h2 class="section-title" id="projects-title">一些项目</h2>
+      <div class="project-list">
+        <article class="project">
+          <div>
+            <h3><a href="https://github.com/dingjiefeng/MusicRecognitionCpp">MusicRecognitionCpp</a></h3>
+            <span class="project-meta">C++ · 38 stars</span>
+          </div>
+          <p>参考 Shazam 思路实现的音乐识别程序，也是目前最受关注的个人项目。</p>
+        </article>
+        <article class="project">
+          <div>
+            <h3><a href="https://github.com/dingjiefeng/ML">ML</a></h3>
+            <span class="project-meta">Python</span>
+          </div>
+          <p>《统计学习方法》相关算法的个人实现与练习。</p>
+        </article>
+        <article class="project">
+          <div>
+            <h3><a href="https://github.com/dingjiefeng/DataStructures-Algorithms_Cpp">Data Structures &amp; Algorithms</a></h3>
+            <span class="project-meta">C++</span>
+          </div>
+          <p>数据结构与算法的 C++ 实现，记录基础能力的长期积累。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <h2 class="section-title" id="about-title">关于</h2>
+      <div class="about-copy">
+        <p>我是 <strong>dingjiefeng</strong>，一名关注后端工程与实用工具的开发者，也持续探索机器学习。</p>
+        <p>我希望这里的文章足够具体：能解释一个决定，复盘一个问题，或者把一段经验变成可以复用的方法。</p>
+        <p><a href="https://github.com/dingjiefeng">在 GitHub 上找到我</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> dingjiefeng</span>
+    <span>静态生成，托管于 GitHub Pages</span>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector('.theme-toggle');
+    const stored = localStorage.getItem('theme');
+    if (stored === 'light' || stored === 'dark') root.dataset.theme = stored;
+
+    toggle.addEventListener('click', () => {
+      const current = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+
+    document.querySelector('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
